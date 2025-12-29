@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
-    <title>THE HUNTER HQ | v28.5 OPERATIONAL</title>
+    <title>THE HUNTER HQ | v29.0 FINAL BATTLE</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,129 +12,107 @@
             --bg-dark: #020617; --sidebar-bg: #0f172a; --border: #1e293b;
             --text: #ffffff; --card-bg: #0f172a; --input-bg: #020617; --term-color: #10b981;
         }
-        body, html { margin: 0; padding: 0; background: var(--bg-dark); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body, html { margin: 0; padding: 0; background: var(--bg-dark); color: var(--text); font-family: 'Inter', sans-serif; }
 
-        /* --- UI ELEMENTS --- */
-        .warning-trigger { display: inline-block; margin-left: 10px; color: var(--danger); cursor: help; font-weight: 900; animation: pulse-red 1.5s infinite; }
-        @keyframes pulse-red { 0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--danger); } 50% { opacity: 0.3; } }
-        .warning-box { visibility: hidden; width: 280px; background: #450a0a; color: #fff; text-align: left; border-radius: 6px; padding: 15px; position: absolute; z-index: 1000; top: 30px; left: 0; font-size: 0.75rem; border: 1px solid var(--danger); opacity: 0; transition: 0.3s; pointer-events: none; }
-        .warning-trigger:hover .warning-box { visibility: visible; opacity: 1; }
-
-        /* --- LAYOUT --- */
+        /* --- UI --- */
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 3000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         #main-app { display: none; min-height: 100vh; }
         .sidebar { width: 280px; background: var(--sidebar-bg); border-right: 1px solid var(--border); position: fixed; height: 100vh; padding: 30px 0; z-index: 100; }
-        .brand { padding: 0 30px 30px; font-weight: 900; color: var(--primary); border-bottom: 1px solid var(--border); display: flex; align-items: center; font-size: 1.1rem; }
-        .nav-item { padding: 15px 30px; cursor: pointer; color: #64748b; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; transition: 0.2s; }
-        .nav-item:hover { color: var(--primary); background: rgba(192, 38, 211, 0.05); }
+        .brand { padding: 0 30px 30px; font-weight: 900; color: var(--primary); border-bottom: 1px solid var(--border); font-size: 1.1rem; }
+        .nav-item { padding: 15px 30px; cursor: pointer; color: #64748b; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
         .nav-item.active { color: var(--text); box-shadow: inset 4px 0 0 var(--primary); background: rgba(192, 38, 211, 0.1); }
 
         .main-content { margin-left: 280px; padding: 40px 60px; width: calc(100% - 280px); box-sizing: border-box; }
-        .section { display: none; max-width: 1000px; animation: fadeIn 0.4s ease; }
+        .section { display: none; animation: fadeIn 0.3s ease; }
         .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- BOXES --- */
         .data-box { background: var(--card-bg); border: 1px solid var(--border); padding: 25px; border-radius: 12px; margin-bottom: 25px; }
-        .terminal-box { background: #070a13; border: 1px solid var(--border); padding: 15px; font-family: 'Roboto Mono'; font-size: 0.75rem; color: var(--term-color); height: 120px; overflow-y: auto; border-radius: 8px; margin-bottom: 20px; border-left: 3px solid var(--primary); }
+        .terminal-box { background: #070a13; border: 1px solid var(--border); padding: 15px; font-family: 'Roboto Mono'; font-size: 0.75rem; color: var(--term-color); height: 100px; overflow-y: auto; border-radius: 8px; margin-bottom: 20px; }
         
-        input, select, textarea { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; width: 100%; margin-bottom: 10px; font-family: inherit; }
-        .btn-hq { background: var(--primary); border: none; color: white; padding: 14px; font-weight: 900; cursor: pointer; border-radius: 8px; width: 100%; text-transform: uppercase; transition: 0.3s; }
-        .btn-hq:hover { transform: scale(1.02); filter: brightness(1.2); }
+        input, select { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; width: 100%; margin-bottom: 10px; }
+        .btn-hq { background: var(--primary); border: none; color: white; padding: 14px; font-weight: 900; cursor: pointer; border-radius: 8px; width: 100%; text-transform: uppercase; }
         
-        .report-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
-        .highlight { color: var(--primary); font-weight: bold; }
-        .code-block { background: #020617; padding: 15px; border-radius: 8px; font-family: 'Roboto Mono'; font-size: 0.8rem; border: 1px dashed var(--border); color: #94a3b8; margin: 10px 0; cursor: pointer; }
+        .report-card { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        .status-tag { font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; background: rgba(16, 185, 129, 0.2); color: var(--success); }
     </style>
 </head>
 <body>
 
     <div id="splash-screen">
-        <div style="font-size: 2.5rem; font-weight: 900;">THE HUNTER <span style="color:var(--primary)">HQ</span></div>
-        <div style="font-family:'Roboto Mono'; font-size:0.7rem; color:var(--success); margin-top:10px;">OS: LINUX | BROWSER: FIREFOX | MODE: GITHUB_HOSTED</div>
-        <div style="width: 200px; background: #1e293b; height: 2px; margin-top: 20px;"><div id="pb" style="width:0%; height:100%; background:var(--primary); transition:3s linear"></div></div>
+        <div style="font-size: 2.5rem; font-weight: 900;">HUNTER <span style="color:var(--primary)">HQ</span></div>
+        <div style="font-family:'Roboto Mono'; font-size:0.7rem; color:var(--success); margin-top:10px;">WALKA Z NIEBEZPIECZNYMI TREŚCIAMI YT...</div>
+        <div style="width: 200px; background: #1e293b; height: 2px; margin-top: 20px;"><div id="pb" style="width:0%; height:100%; background:var(--primary); transition:2.5s linear"></div></div>
     </div>
 
     <div id="main-app">
         <div class="sidebar">
-            <div class="brand">HUNTER HQ <div class="warning-trigger">[ ! ]<div class="warning-box">Środowisko Linux + Firefox aktywne. System bezpieczny. Korzystasz z konta: steal brainortnews.</div></div></div>
+            <div class="brand">HUNTER HQ | v29.0</div>
             <ul class="nav-list">
                 <li class="nav-item active" data-target="dashboard">DASHBOARD</li>
-                <li class="nav-item" data-target="intelligence">WYWIAD / TOOLS</li>
-                <li class="nav-item" data-target="about">O NAS / MANIFEST</li>
+                <li class="nav-item" data-target="about">O NAS / MISJA</li>
                 <li class="nav-item" data-target="safety">BEZPIECZEŃSTWO</li>
+                <li class="nav-item" data-target="intelligence">NARZĘDZIA</li>
                 <li class="nav-item" data-target="settings">USTAWIENIA</li>
             </ul>
         </div>
 
         <main class="main-content">
             <section id="dashboard" class="section active">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                    <div style="font-weight: 900; font-size: 1.2rem;">OPERATOR: <span id="displayNick" style="color:var(--primary)">steal brainortnews</span></div>
-                    <div style="color:var(--success); font-size: 0.8rem; font-weight: bold;">● STATUS: GHOST_ONLINE</div>
-                </div>
-
+                <div style="font-weight: 900; margin-bottom: 20px;">OPERATOR: <span style="color:var(--primary)">steal brainortnews</span></div>
                 <div class="terminal-box" id="term"></div>
                 
                 <div class="data-box">
-                    <h2>REJESTRACJA CELU YOUTUBE</h2>
-                    <input type="text" id="rt" placeholder="Wklej link do szkodliwego filmu">
-                    <button class="btn-hq" onclick="addRep()">ZALOGUJ RAPORT</button>
+                    <h2>REJESTRACJA NIEBEZPIECZNEGO FILMU</h2>
+                    <input type="text" id="rt" placeholder="LINK DO FILMU (URL)">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <input type="number" id="rc" placeholder="LICZBA ZGŁOSZEŃ">
+                        <select id="rcountry">
+                            <option>WYBIERZ KRAJ...</option>
+                            <option>Polska</option><option>USA</option><option>Rosja</option><option>Wietnam</option><option>Niemcy</option>
+                        </select>
+                    </div>
+                    <button class="btn-hq" onclick="addRep()">DODAJ DO BAZY CELÓW</button>
                 </div>
                 <div id="rg"></div>
             </section>
 
-            <section id="intelligence" class="section">
-                <h2>TOOLS & INTELLIGENCE</h2>
-                <div class="data-box">
-                    <h3>LINK PURIFIER (YOUTUBE PRIVACY)</h3>
-                    <p>Usuń parametry śledzące przed otwarciem filmu:</p>
-                    <input type="text" id="dirtyLink" placeholder="https://www.youtube.com/watch?v=...&si=xyz">
-                    <button class="btn-hq" style="background:var(--success)" onclick="purifyLink()">OCZYŚĆ LINK</button>
-                    <div id="cleanResult" class="code-block" style="display:none;" onclick="copyTxt(this.innerText)"></div>
-
-                    <h3 style="margin-top:30px;">TAGI UNICODE (SEKTOR .)</h3>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                        <button class="btn-hq" style="background:var(--sidebar-bg); border:1px solid var(--border)" onclick="copyTxt('․․․')">․․․ (One Dot)</button>
-                        <button class="btn-hq" style="background:var(--sidebar-bg); border:1px solid var(--border)" onclick="copyTxt('．．．')">．．． (Full Width)</button>
-                    </div>
-                </div>
-            </section>
-
             <section id="about" class="section">
-                <h2>O NAS / MANIFEST OPERACYJNY</h2>
+                <h2>O NAS / MISJA HQ</h2>
                 <div class="data-box">
-                    <h3>CEL: OCZYSZCZANIE YOUTUBE</h3>
-                    <p>Hunter HQ to terminal dedykowany do zwalczania patologii w <span class="highlight">Sektorze . (Dot Sector)</span> na platformie YouTube.</p>
-                    
-                    <h3 style="margin-top:20px;">MISJA:</h3>
-                    <p>Wykrywamy i raportujemy sieci botnetów, które wykorzystują ukryte znaki Unicode, aby omijać filtry moderacyjne YouTube i dystrybuować szkodliwe treści.</p>
-                    
-                    <h3>OPERACJE:</h3>
-                    <ul>
-                        <li>Monitorowanie ukrytych tagów YouTube.</li>
-                        <li>Skoordynowane zgłaszanie naruszeń regulaminu (Community Guidelines).</li>
-                        <li>Ochrona prywatności operatora (Linux Hardened Setup).</li>
-                    </ul>
-                    <p style="font-size:0.8rem; color:#64748b; border-top:1px solid var(--border); padding-top:10px;">TARGET: YOUTUBE SECTOR . | V28.5 FINAL</p>
+                    <h3 style="color:var(--danger)">WALCZYMY Z NIEBEZPIECZNYMI FILMAMI NA YT</h3>
+                    <p>Hunter HQ to jednostka powołana do walki z najbardziej mrocznymi zakątkami YouTube. Naszym celem jest usuwanie filmów zagrażających bezpieczeństwu, promujących przemoc lub ukrywających szkodliwe treści pod maską "Sektora .".</p>
+                    <p>Wspólnie z operatorem <span style="color:var(--primary)">steal brainortnews</span> monitorujemy sieć i wysyłamy masowe raporty, aby algorytm YouTube trwale blokował szkodliwe kanały.</p>
                 </div>
             </section>
 
             <section id="safety" class="section">
-                <h2>BEZPIECZEŃSTWO (LINUX & FIREFOX)</h2>
+                <h2>BEZPIECZEŃSTWO OPERACYJNE</h2>
                 <div class="data-box">
-                    <h3>KONFIGURACJA SPRZĘTOWA:</h3>
-                    <p>Używasz <strong>Linuxa</strong> – jesteś odporny na złośliwe skrypty Windowsowe.</p>
-                    <p>Używasz <strong>Firefoxa + AdBlock</strong> – blokujesz śledzenie botów.</p>
-                    <h3 style="margin-top:20px;">ZASADA ZERO ŚLADÓW:</h3>
-                    <p>Używasz konta <strong>steal brainortnews</strong> z opisem <strong>unknown</strong>. To idealna przykrywka. Po każdej sesji na YouTube wyczyść historię Firefoxa.</p>
+                    <h3>TWOJA TARCZA: LINUX + FIREFOX</h3>
+                    <p>Dzięki temu, że korzystasz z systemu Linux, większość wirusów od botnetów nie działa. Firefox z AdBlockiem chroni Cię przed śledzeniem.</p>
+                    <p><strong>ZASADA CZUWANIA:</strong> Twoje konto <strong>steal brainortnews</strong> z opisem <strong>unknown</strong> jest bezpieczne, bo nie zawiera żadnych danych osobowych.</p>
+                    <ul style="color:var(--warning)">
+                        <li>Nigdy nie wchodź na niebezpieczne linki bez VPN.</li>
+                        <li>Czyść historię po każdej misji.</li>
+                        <li>Nie używaj tego samego konta do spraw prywatnych.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="intelligence" class="section">
+                <h2>NARZĘDZIA WYWIADU</h2>
+                <div class="data-box">
+                    <h3>UKRYTE TAGI KROPKOWE</h3>
+                    <button class="btn-hq" onclick="copyTxt('․․․')">KOPIUJ TAG 1 (․․․)</button>
+                    <button class="btn-hq" onclick="copyTxt('．．．')">KOPIUJ TAG 2 (．．．)</button>
                 </div>
             </section>
 
             <section id="settings" class="section">
                 <h2>USTAWIENIA</h2>
                 <div class="data-box">
-                    <button class="btn-hq" onclick="factoryReset()" style="background:var(--danger)">WIPE ALL DATA (FORMATUJ HQ)</button>
+                    <button class="btn-hq" onclick="factoryReset()" style="background:var(--danger)">WIPE ALL DATA (FORMATUJ)</button>
                 </div>
             </section>
         </main>
@@ -149,29 +127,18 @@
                 document.getElementById('splash-screen').style.display = 'none';
                 document.getElementById('main-app').style.display = 'block';
                 render();
-                log("SYSTEM READY. OPERATOR: STEAL BRAINORTNEWS.");
-            }, 3000);
-        }
-
-        function purifyLink() {
-            const val = document.getElementById('dirtyLink').value;
-            try {
-                const url = new URL(val);
-                const clean = url.origin + url.pathname + "?v=" + url.searchParams.get("v");
-                const res = document.getElementById('cleanResult');
-                res.style.display = "block"; res.innerText = clean;
-                log("LINK OCZYSZCZONY.");
-            } catch(e) { alert("Błędny link YouTube."); }
+                log("SYSTEM READY. CEL: OCZYSZCZANIE YT.");
+            }, 2500);
         }
 
         function addRep() {
-            const t = document.getElementById('rt').value;
-            if(t) {
-                reports.push({id: Date.now(), t});
+            const t = document.getElementById('rt').value, c = document.getElementById('rc').value, country = document.getElementById('rcountry').value;
+            if(t && c) {
+                reports.push({id: Date.now(), t, c, country});
                 localStorage.setItem('h_reps', JSON.stringify(reports));
-                log("CEL ZALOGOWANY: " + t);
+                log("NOWY CEL: " + t);
                 render();
-                document.getElementById('rt').value = '';
+                document.getElementById('rt').value = ''; document.getElementById('rc').value = '';
             }
         }
 
@@ -179,18 +146,18 @@
             const g = document.getElementById('rg'); g.innerHTML = '';
             reports.forEach(r => {
                 const d = document.createElement('div'); d.className = 'report-card';
-                d.innerHTML = `<strong>${r.t}</strong> <button onclick="delRep(${r.id})" style="background:none; border:none; color:var(--danger); cursor:pointer;">USUŃ</button>`;
+                d.innerHTML = `<div><strong>${r.t}</strong><br><small>${r.country}</small></div> <div><span class="status-tag">${r.c} RAPORTÓW</span></div>`;
                 g.appendChild(d);
             });
         }
 
-        function delRep(id) { reports = reports.filter(x => x.id !== id); localStorage.setItem('h_reps', JSON.stringify(reports)); render(); }
         function log(m) {
             const l = document.createElement('div');
             l.innerHTML = `[${new Date().toLocaleTimeString()}] > ${m}`;
             document.getElementById('term').prepend(l);
         }
-        function copyTxt(t) { navigator.clipboard.writeText(t); alert("Skopiowano do schowka."); }
+
+        function copyTxt(t) { navigator.clipboard.writeText(t); alert("Skopiowano."); }
         function factoryReset() { if(confirm("CZYŚCIĆ WSZYSTKO?")) { localStorage.clear(); location.reload(); } }
 
         document.querySelectorAll('.nav-item').forEach(i => {
@@ -206,3 +173,5 @@
     </script>
 </body>
 </html>
+
+      
